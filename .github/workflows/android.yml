@@ -1,0 +1,32 @@
+name: Android CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'zulu'
+        java-version: '11'
+
+    - name: Download dependencies
+      run: ./gradlew dependencies
+
+    - name: Build the project
+      run: ./gradlew build --stacktrace
+
+    - name: Run tests
+      run: ./gradlew connectedAndroidTest
